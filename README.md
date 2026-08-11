@@ -1,5 +1,5 @@
 <p align="left">
-  <img src="src/main/resources/assets/lumenless/icon.png" alt="Lumenless icon" width="200">
+  <img src="src/main/resources/assets/lumenless/icon.jpg" alt="Lumenless icon" width="200">
 </p>
 
 # Lumenless
