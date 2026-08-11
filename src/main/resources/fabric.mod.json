@@ -3,7 +3,7 @@
   "id": "lumenless",
   "version": "${version}",
   "name": "Lumenless",
-  "description": "Ultra-light, fullbright-oriented rendering experiments for Minecraft 26.2.",
+  "description": "Fullbright lighting, fog clearing, and rendering optimizations that improve visibility without sacrificing performance.",
   "icon": "assets/lumenless/icon.png",
   "authors": ["Jonyboylovespie"],
   "contact": {
