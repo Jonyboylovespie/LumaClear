@@ -4,7 +4,7 @@
   "version": "${version}",
   "name": "Lumenless",
   "description": "Ultra-light, fullbright-oriented rendering experiments for Minecraft 26.2.",
-  "icon": "assets/lumenless/icon.jpg",
+  "icon": "assets/lumenless/icon.png",
   "authors": ["Jonyboylovespie"],
   "contact": {
     "sources": "https://github.com/Jonyboylovespie/Lumenless"
