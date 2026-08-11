@@ -6,6 +6,7 @@
   "client": [
     "LightmapRenderStateExtractorMixin",
     "FogRendererMixin",
+    "AtmosphericFogEnvironmentMixin",
     "LevelRendererMixin",
     "BlockModelLighterMixin",
     "WeatherEffectRendererMixin",

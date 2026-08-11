@@ -15,7 +15,11 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public abstract class SodiumWorldRendererMixin {
     @ModifyVariable(method = "setupTerrain", at = @At("HEAD"), argsOnly = true)
     private FogParameters lumenless$disableFogCulling(FogParameters original) {
-        if (!LumenlessConfig.fogDisabledFor(Minecraft.getInstance().gameRenderer.mainCamera())) {
+        boolean environmental = LumenlessConfig.environmentalFogDisabledFor(
+                Minecraft.getInstance().gameRenderer.mainCamera()
+        );
+        boolean distance = LumenlessConfig.distanceFogDisabled();
+        if (!environmental && !distance) {
             return original;
         }
 
@@ -25,10 +29,10 @@ public abstract class SodiumWorldRendererMixin {
                 original.green(),
                 original.blue(),
                 original.alpha(),
-                disabled,
-                disabled,
-                disabled,
-                disabled
+                environmental ? disabled : original.environmentalStart(),
+                environmental ? disabled : original.environmentalEnd(),
+                distance ? disabled : original.renderStart(),
+                distance ? disabled : original.renderEnd()
         );
     }
 }

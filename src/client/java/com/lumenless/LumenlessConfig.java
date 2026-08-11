@@ -133,7 +133,7 @@ public final class LumenlessConfig {
                 INSTANCE.noNetherFog = false;
                 INSTANCE.noWeatherFog = false;
                 INSTANCE.disableAmbientOcclusion = false;
-                INSTANCE.directionalShading = false;
+                INSTANCE.directionalShading = true;
                 INSTANCE.directionalShadingStrength = 1.0F;
                 INSTANCE.hideRain = false;
                 INSTANCE.hideSnow = false;
@@ -233,24 +233,39 @@ public final class LumenlessConfig {
         return 1.0F - (1.0F - base) * strength;
     }
 
+    public static boolean applyDirectionalShading(boolean modelShade) {
+        return RenderToggleLogic.directionalShade(active(), INSTANCE.directionalShading, modelShade);
+    }
+
     public static void applySimpleQuadLighting(QuadInstance output, Direction direction, boolean shade) {
         output.setLightCoords(LightCoordsUtil.FULL_BRIGHT);
         output.setColor(ARGB.gray(faceShade(direction, shade)));
     }
 
     public static void applyFog(Camera camera, FogData fog) {
-        if (fogDisabledFor(camera)) {
-            fog.environmentalStart = Float.MAX_VALUE;
-            fog.environmentalEnd = Float.MAX_VALUE;
+        if (distanceFogDisabled()) {
             fog.renderDistanceStart = Float.MAX_VALUE;
             fog.renderDistanceEnd = Float.MAX_VALUE;
             fog.skyEnd = Float.MAX_VALUE;
             fog.cloudEnd = Float.MAX_VALUE;
         }
+
+        if (environmentalFogDisabledFor(camera)) {
+            fog.environmentalStart = Float.MAX_VALUE;
+            fog.environmentalEnd = Float.MAX_VALUE;
+        }
     }
 
-    /** True when the current camera must not be fog-culled by either Minecraft or Sodium. */
-    public static boolean fogDisabledFor(Camera camera) {
+    public static boolean distanceFogDisabled() {
+        return RenderToggleLogic.settingActive(active(), INSTANCE.noDistanceFog);
+    }
+
+    public static boolean weatherFogDisabled() {
+        return RenderToggleLogic.settingActive(active(), INSTANCE.noWeatherFog);
+    }
+
+    /** True when the camera's current environment-specific fog must be removed. */
+    public static boolean environmentalFogDisabledFor(Camera camera) {
         if (!active()) {
             return false;
         }
@@ -259,9 +274,7 @@ public final class LumenlessConfig {
             case WATER -> INSTANCE.noUnderwaterFog;
             case LAVA -> INSTANCE.noLavaFog;
             case POWDER_SNOW -> INSTANCE.noPowderSnowFog;
-            case NONE, ATMOSPHERIC -> INSTANCE.noDistanceFog
-                    || (INSTANCE.noNetherFog && isNether(camera))
-                    || INSTANCE.noWeatherFog;
+            case NONE, ATMOSPHERIC -> INSTANCE.noNetherFog && isNether(camera);
         };
 
         return environmentFogDisabled || (INSTANCE.noDarknessFog && isDarknessEffect(camera.entity()));

@@ -42,6 +42,9 @@ dependencies {
 
     // Optional Mod Menu integration. Mod Menu remains a separate mod and is not bundled.
     compileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.11.4'
 }
 
 processResources {
@@ -56,6 +59,10 @@ processResources {
 tasks.withType(JavaCompile).configureEach {
     it.options.release = 25
     it.options.encoding = 'UTF-8'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 java {

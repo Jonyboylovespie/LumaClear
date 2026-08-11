@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Arrays;
@@ -18,6 +19,11 @@ import java.util.Arrays;
 @Mixin(FlatLightPipeline.class)
 @Pseudo
 public abstract class FlatLightPipelineMixin {
+    @ModifyVariable(method = "calculate", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private boolean lumenless$applyDirectionalShading(boolean shade) {
+        return LumenlessConfig.applyDirectionalShading(shade);
+    }
+
     @Inject(method = "calculate", at = @At("HEAD"), cancellable = true)
     private void lumenless$replaceLighting(
             ModelQuadView quad,
