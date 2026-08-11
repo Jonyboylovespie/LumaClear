@@ -1,9 +1,8 @@
-<table>
-  <tr>
-    <td><h1>Lumenless</h1></td>
-    <td align="right"><img src="src/main/resources/assets/lumenless/icon.jpg" alt="Lumenless icon" width="64"></td>
-  </tr>
-</table>
+<p align="left">
+  <img src="src/main/resources/assets/lumenless/icon.png" alt="Lumenless icon" width="200">
+</p>
+
+# Lumenless
 
 Lumenless is a client-side Fabric mod that brings fullbright lighting, fog clearing, and targeted rendering optimizations together in one lightweight package. It is designed to make Minecraft clearer while improving performance rather than trading performance away.
 
