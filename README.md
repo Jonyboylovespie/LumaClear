@@ -41,6 +41,10 @@ There are no additional framebuffers, deferred passes, shadows, bloom, SSAO, ref
 
 The current build targets the Minecraft 26.2 and Fabric 26.2 APIs and requires Java 25. Sodium integrations are optional and are skipped automatically when Sodium is not installed. Because Minecraft's rendering internals can change between releases, revalidate Lumenless when upgrading Minecraft or Sodium.
 
+## Support
+
+Report bugs and request features on the [Lumenless issue tracker](https://github.com/Jonyboylovespie/Lumenless/issues).
+
 ## Development
 
 Use Java 25 and the included Gradle wrapper to build the mod:
