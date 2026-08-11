@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "lumenless",
+  "version": "${version}",
+  "name": "Lumenless",
+  "description": "Ultra-light, fullbright-oriented rendering experiments for Minecraft 26.2.",
+  "authors": ["Jonyboylovespie"],
+  "contact": {
+    "sources": "https://github.com/Jonyboylovespie/Lumenless"
+  },
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.lumenless.client.LumenlessClient"
+    ],
+    "modmenu": [
+      "com.lumenless.client.LumenlessModMenu"
+    ]
+  },
+  "mixins": [
+    {
+      "config": "lumenless.client.mixins.json",
+      "environment": "client"
+    },
+    {
+      "config": "lumenless.sodium.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "~26.2",
+    "java": ">=25",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "sodium": "*",
+    "modmenu": "*"
+  }
+}
