@@ -18,8 +18,7 @@ public final class LumenlessConfigScreen extends Screen {
     private static final LumenlessConfig.Preset[] SLIDER_PRESETS = {
             LumenlessConfig.Preset.VANILLA,
             LumenlessConfig.Preset.FULLBRIGHT,
-            LumenlessConfig.Preset.CLARITY,
-            LumenlessConfig.Preset.MAXIMUM
+            LumenlessConfig.Preset.CLARITY
     };
 
     private final @Nullable Screen parent;
@@ -74,25 +73,9 @@ public final class LumenlessConfigScreen extends Screen {
         this.addRenderableWidget(settingToggle(left, y, "Disable weather fog",
                 () -> LumenlessConfig.get().noWeatherFog,
                 () -> LumenlessConfig.get().noWeatherFog = !LumenlessConfig.get().noWeatherFog));
-        this.addRenderableWidget(settingToggle(right, y, "Disable ambient occlusion",
-                () -> LumenlessConfig.get().disableAmbientOcclusion,
-                () -> LumenlessConfig.get().disableAmbientOcclusion = !LumenlessConfig.get().disableAmbientOcclusion));
-
-        y += 21;
-        this.addRenderableWidget(settingToggle(left, y, "Directional shading",
+        this.addRenderableWidget(settingToggle(right, y, "Directional shading",
                 () -> LumenlessConfig.get().directionalShading,
                 () -> LumenlessConfig.get().directionalShading = !LumenlessConfig.get().directionalShading));
-        this.addRenderableWidget(settingToggle(right, y, "Hide vignette",
-                () -> LumenlessConfig.get().hideVignette,
-                () -> LumenlessConfig.get().hideVignette = !LumenlessConfig.get().hideVignette));
-
-        y += 21;
-        this.addRenderableWidget(settingToggle(left, y, "Hide rain",
-                () -> LumenlessConfig.get().hideRain,
-                () -> LumenlessConfig.get().hideRain = !LumenlessConfig.get().hideRain));
-        this.addRenderableWidget(settingToggle(right, y, "Hide snow",
-                () -> LumenlessConfig.get().hideSnow,
-                () -> LumenlessConfig.get().hideSnow = !LumenlessConfig.get().hideSnow));
 
         this.addRenderableWidget(Button.builder(Component.literal("Done"), button -> this.onClose())
                 .bounds(this.width / 2 - 75, this.height - 26, COLUMN_WIDTH, 20).build());

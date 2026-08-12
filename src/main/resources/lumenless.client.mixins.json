@@ -8,9 +8,8 @@
     "FogRendererMixin",
     "AtmosphericFogEnvironmentMixin",
     "LevelRendererMixin",
-    "BlockModelLighterMixin",
-    "WeatherEffectRendererMixin",
-    "HudMixin"
+    "ShaderManagerMixin",
+    "BlockModelLighterMixin"
   ],
   "injectors": {
     "defaultRequire": 1

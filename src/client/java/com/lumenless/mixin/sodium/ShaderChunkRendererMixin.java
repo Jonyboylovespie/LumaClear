@@ -19,6 +19,9 @@ public abstract class ShaderChunkRendererMixin {
             TerrainRenderPass pass,
             CallbackInfoReturnable<List<String>> cir
     ) {
+        if (LumenlessConfig.fullbrightActive()) {
+            cir.getReturnValue().add("LUMENLESS_FULLBRIGHT");
+        }
         if (LumenlessConfig.removeSodiumFogShader()) {
             cir.getReturnValue().remove("USE_FOG");
         }

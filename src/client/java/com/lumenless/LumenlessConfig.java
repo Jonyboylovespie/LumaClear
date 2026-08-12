@@ -5,16 +5,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.fog.FogData;
-import net.minecraft.core.Direction;
-import net.minecraft.util.ARGB;
-import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FogType;
-import com.mojang.blaze3d.vertex.QuadInstance;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,7 +30,6 @@ public final class LumenlessConfig {
         VANILLA("Vanilla"),
         FULLBRIGHT("Fullbright"),
         CLARITY("Lumenless Clarity (Recommended)"),
-        MAXIMUM("Lumenless Maximum"),
         CUSTOM("Custom");
 
         private final String displayName;
@@ -61,13 +55,7 @@ public final class LumenlessConfig {
     public boolean noNetherFog = true;
     public boolean noWeatherFog = true;
 
-    public boolean disableAmbientOcclusion = false;
     public boolean directionalShading = true;
-    public float directionalShadingStrength = 1.0F;
-
-    public boolean hideRain = false;
-    public boolean hideSnow = false;
-    public boolean hideVignette = false;
 
     private LumenlessConfig() {
     }
@@ -115,12 +103,7 @@ public final class LumenlessConfig {
                 INSTANCE.noPowderSnowFog = false;
                 INSTANCE.noNetherFog = false;
                 INSTANCE.noWeatherFog = false;
-                INSTANCE.disableAmbientOcclusion = false;
                 INSTANCE.directionalShading = false;
-                INSTANCE.directionalShadingStrength = 1.0F;
-                INSTANCE.hideRain = false;
-                INSTANCE.hideSnow = false;
-                INSTANCE.hideVignette = false;
             }
             case FULLBRIGHT -> {
                 INSTANCE.enabled = true;
@@ -132,12 +115,7 @@ public final class LumenlessConfig {
                 INSTANCE.noPowderSnowFog = false;
                 INSTANCE.noNetherFog = false;
                 INSTANCE.noWeatherFog = false;
-                INSTANCE.disableAmbientOcclusion = false;
                 INSTANCE.directionalShading = true;
-                INSTANCE.directionalShadingStrength = 1.0F;
-                INSTANCE.hideRain = false;
-                INSTANCE.hideSnow = false;
-                INSTANCE.hideVignette = false;
             }
             case CLARITY -> {
                 INSTANCE.enabled = true;
@@ -149,29 +127,7 @@ public final class LumenlessConfig {
                 INSTANCE.noPowderSnowFog = true;
                 INSTANCE.noNetherFog = true;
                 INSTANCE.noWeatherFog = true;
-                INSTANCE.disableAmbientOcclusion = false;
                 INSTANCE.directionalShading = true;
-                INSTANCE.directionalShadingStrength = 1.0F;
-                INSTANCE.hideRain = false;
-                INSTANCE.hideSnow = false;
-                INSTANCE.hideVignette = false;
-            }
-            case MAXIMUM -> {
-                INSTANCE.enabled = true;
-                INSTANCE.fullbright = true;
-                INSTANCE.noDistanceFog = true;
-                INSTANCE.noDarknessFog = true;
-                INSTANCE.noUnderwaterFog = true;
-                INSTANCE.noLavaFog = true;
-                INSTANCE.noPowderSnowFog = true;
-                INSTANCE.noNetherFog = true;
-                INSTANCE.noWeatherFog = true;
-                INSTANCE.disableAmbientOcclusion = true;
-                INSTANCE.directionalShading = false;
-                INSTANCE.directionalShadingStrength = 1.0F;
-                INSTANCE.hideRain = false;
-                INSTANCE.hideSnow = false;
-                INSTANCE.hideVignette = false;
             }
             case CUSTOM -> INSTANCE.enabled = true;
         }
@@ -198,15 +154,6 @@ public final class LumenlessConfig {
         return active() && INSTANCE.fullbright;
     }
 
-    /**
-     * True when vanilla/Sodium can skip their light/AO calculation and use a fixed result. Clarity deliberately
-     * keeps the native vertex shading: the reference shader removes lightmap darkness but preserves ambient
-     * occlusion and face shading, which carry most of the terrain's visible depth.
-     */
-    public static boolean simplifiedBlockLighting() {
-        return fullbrightActive() && INSTANCE.disableAmbientOcclusion;
-    }
-
     public static boolean removeSodiumFogShader() {
         return active()
                 && INSTANCE.noDistanceFog
@@ -218,28 +165,8 @@ public final class LumenlessConfig {
                 && INSTANCE.noWeatherFog;
     }
 
-    public static float faceShade(Direction direction, boolean shade) {
-        if (!shade || !INSTANCE.directionalShading || direction == null) {
-            return 1.0F;
-        }
-
-        float base = switch (direction) {
-            case UP -> 1.00F;
-            case NORTH, SOUTH -> 0.93F;
-            case EAST, WEST -> 0.86F;
-            case DOWN -> 0.80F;
-        };
-        float strength = Math.max(0.0F, Math.min(1.0F, INSTANCE.directionalShadingStrength));
-        return 1.0F - (1.0F - base) * strength;
-    }
-
     public static boolean applyDirectionalShading(boolean modelShade) {
         return RenderToggleLogic.directionalShade(active(), INSTANCE.directionalShading, modelShade);
-    }
-
-    public static void applySimpleQuadLighting(QuadInstance output, Direction direction, boolean shade) {
-        output.setLightCoords(LightCoordsUtil.FULL_BRIGHT);
-        output.setColor(ARGB.gray(faceShade(direction, shade)));
     }
 
     public static void applyFog(Camera camera, FogData fog) {
@@ -280,18 +207,6 @@ public final class LumenlessConfig {
         return environmentFogDisabled || (INSTANCE.noDarknessFog && isDarknessEffect(camera.entity()));
     }
 
-    public static boolean hideRain() {
-        return active() && INSTANCE.hideRain;
-    }
-
-    public static boolean hideSnow() {
-        return active() && INSTANCE.hideSnow;
-    }
-
-    public static boolean hideVignette() {
-        return active() && INSTANCE.hideVignette;
-    }
-
     public static String activePresetName() {
         return INSTANCE.preset.displayName();
     }
@@ -316,21 +231,12 @@ public final class LumenlessConfig {
         INSTANCE.noPowderSnowFog = loaded.noPowderSnowFog;
         INSTANCE.noNetherFog = loaded.noNetherFog;
         INSTANCE.noWeatherFog = loaded.noWeatherFog;
-        INSTANCE.disableAmbientOcclusion = loaded.disableAmbientOcclusion;
         INSTANCE.directionalShading = loaded.directionalShading;
-        INSTANCE.directionalShadingStrength = loaded.directionalShadingStrength;
-        INSTANCE.hideRain = loaded.hideRain;
-        INSTANCE.hideSnow = loaded.hideSnow;
-        INSTANCE.hideVignette = loaded.hideVignette;
     }
 
     private static void sanitize() {
         if (INSTANCE.preset == null) {
             INSTANCE.preset = Preset.CLARITY;
         }
-        if (!Float.isFinite(INSTANCE.directionalShadingStrength)) {
-            INSTANCE.directionalShadingStrength = 1.0F;
-        }
-        INSTANCE.directionalShadingStrength = Math.max(0.0F, Math.min(1.0F, INSTANCE.directionalShadingStrength));
     }
 }
