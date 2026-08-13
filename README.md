@@ -1,12 +1,12 @@
-<p align="left">
-  <img src="https://raw.githubusercontent.com/Jonyboylovespie/LumaClear/refs/heads/main/ComparisonScreenshots/SideBySide/Underwater-compressed.jpg" alt="Underwater comparison: Vanilla, Fullbright, and LumaClear" width="100%">
-</p>
-
 # LumaClear
 
 LumaClear is a client-side Fabric mod that brings fullbright lighting, fog clearing, and targeted rendering optimizations together in one lightweight package. It is designed to make Minecraft clearer while improving performance rather than trading performance away.
 
 LumaClear works with vanilla textures, biome tinting, entity effects, and normal rendering behavior. It does not require Iris or a shaderpack.
+
+<p align="left">
+  <img src="https://raw.githubusercontent.com/Jonyboylovespie/LumaClear/refs/heads/main/ComparisonScreenshots/SideBySide/Underwater-compressed.jpg" alt="Underwater comparison: Vanilla, Fullbright, and LumaClear" width="100%">
+</p>
 
 ## Installation
 
