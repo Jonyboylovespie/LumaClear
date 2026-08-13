@@ -31,7 +31,13 @@ Cloud visibility remains controlled by Minecraft or Sodium.
 
 ## Performance
 
-Lumenless applies its changes through the existing rendering paths instead of adding expensive fullscreen effects or extra rendering passes. Its optimizations can reduce unnecessary light sampling and fog work, while optional Sodium integrations use the same fast paths when Sodium is installed.
+Lumenless is built to provide a clearer view without paying the heavy rendering cost of a shaderpack. In the published MineBench results, the full Lumenless Default/Clarity configuration averaged 1,344.5 FPS, compared with 769.7 FPS for Iris + the Clarity shaderpack—a 74.7% higher average in the complete five-scene suite. Its 1% low result was also 32.9% higher. With the Nether flythrough excluded, where Lumenless intentionally renders much farther because Nether and distance fog are disabled, the advantage was 77.2% in average FPS.
+
+Lumenless also slightly outperformed the tested generic fullbright alternatives while providing substantially more visual clarity. The fog-preserving Lumenless Fullbright preset measured 0.9% higher average FPS and 2.6% higher 1% lows than the Fullbright UB resource pack, and its 1% lows were 1.3% higher than Sodium + Gamma Utils. These differences are small and should be treated as near-parity rather than a universal guarantee, but they show that the extra clarity features do not require a performance penalty in the normal-fog preset. The full Default/Clarity preset was 3.6% ahead of Sodium after excluding the Nether route, and 3.7–4.0% ahead of the two generic fullbright comparisons on that same basis.
+
+The main tradeoff is intentional: removing distance and Nether fog exposes more distant terrain, so the Default/Clarity preset can render more geometry than fog-preserving alternatives. In the benchmark’s long Nether flythrough, that reduced Default’s result to 1,167.8 FPS versus roughly 3,700 FPS for fog-preserving configurations. This is the cost of seeing farther, not a sign that the mod’s core lighting optimizations are ineffective. The published results use a fixed route and one test system, so actual gains will vary by hardware, view distance, scene complexity, and configuration.
+
+Lumenless applies its changes through existing rendering paths instead of adding expensive fullscreen effects or extra rendering passes. Its optimizations can reduce unnecessary light sampling and fog work, while optional Sodium integrations use the same fast paths when Sodium is installed. See the [published performance results](https://github.com/Jonyboylovespie/Lumenless/blob/main/PUBLISHED_PERFORMANCE_RESULTS.md) for the complete tables and methodology.
 
 There are no additional framebuffers, deferred passes, shadows, bloom, SSAO, reflections, motion blur, anti-aliasing replacements, or Iris dependencies.
 
