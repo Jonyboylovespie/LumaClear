@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.lumaclear.mixin",
+  "compatibilityLevel": "JAVA_13",
+  "client": [
+    "LightmapRenderStateExtractorMixin",
+    "FogRendererMixin",
+    "AtmosphericFogEnvironmentMixin",
+    "LevelRendererMixin",
+    "ShaderManagerMixin",
+    "BlockModelLighterMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

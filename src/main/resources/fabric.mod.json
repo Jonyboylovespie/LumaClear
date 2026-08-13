@@ -1,32 +1,32 @@
 {
   "schemaVersion": 1,
-  "id": "lumenless",
+  "id": "lumaclear",
   "version": "${version}",
-  "name": "Lumenless",
+  "name": "LumaClear",
   "description": "Fullbright lighting, fog clearing, and rendering optimizations that improve visibility without sacrificing performance.",
-  "icon": "assets/lumenless/icon.png",
+  "icon": "assets/lumaclear/icon.png",
   "authors": ["Jonyboylovespie"],
   "contact": {
-    "sources": "https://github.com/Jonyboylovespie/Lumenless",
-    "issues": "https://github.com/Jonyboylovespie/Lumenless/issues"
+    "sources": "https://github.com/Jonyboylovespie/LumaClear",
+    "issues": "https://github.com/Jonyboylovespie/LumaClear/issues"
   },
   "license": "MIT",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.lumenless.client.LumenlessClient"
+      "com.lumaclear.client.LumaClearClient"
     ],
     "modmenu": [
-      "com.lumenless.client.LumenlessModMenu"
+      "com.lumaclear.client.LumaClearModMenu"
     ]
   },
   "mixins": [
     {
-      "config": "lumenless.client.mixins.json",
+      "config": "lumaclear.client.mixins.json",
       "environment": "client"
     },
     {
-      "config": "lumenless.sodium.mixins.json",
+      "config": "lumaclear.sodium.mixins.json",
       "environment": "client"
     }
   ],
