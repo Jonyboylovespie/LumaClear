@@ -23,7 +23,6 @@ Open the Lumenless settings screen with `F7`, or use the configuration button in
 
 | Preset | Description |
 | --- | --- |
-| **Vanilla** | Disables Lumenless and restores vanilla light and ambient-occlusion behavior. |
 | **Fullbright** | Provides fullbright visibility while retaining normal fog and block-light geometry behavior. |
 | **Clarity** *(recommended)* | Enables every Lumenless feature: fullbright, fog clearing, and directional shading while preserving vanilla/Sodium ambient occlusion. |
 | **Custom** | Configure individual Lumenless settings yourself. |

@@ -40,11 +40,6 @@ public final class LumenlessClient implements ClientModInitializer {
         if (config.enabled) {
             config.enabled = false;
         } else {
-            if (config.preset == LumenlessConfig.Preset.VANILLA) {
-                LumenlessConfig.applyPreset(LumenlessConfig.Preset.CLARITY);
-                settingsChanged();
-                return;
-            }
             config.enabled = true;
         }
         settingsChanged();
@@ -58,8 +53,8 @@ public final class LumenlessClient implements ClientModInitializer {
     }
 
     /**
-     * Block lighting is baked into compiled chunk geometry. Rebuild it when a preset changes so returning to
-     * Vanilla cannot leave already-rendered chunks with Lumenless light/AO values.
+     * Block lighting is baked into compiled chunk geometry. Rebuild it when a preset changes so already-rendered
+     * chunks do not retain stale Lumenless light/AO values.
      */
     private static void rebuildWorldGeometry() {
         Minecraft client = Minecraft.getInstance();

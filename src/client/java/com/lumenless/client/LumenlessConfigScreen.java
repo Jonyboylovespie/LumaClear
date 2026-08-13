@@ -16,7 +16,6 @@ public final class LumenlessConfigScreen extends Screen {
     private static final int COLUMN_WIDTH = 150;
     private static final int FULL_WIDTH = 310;
     private static final LumenlessConfig.Preset[] SLIDER_PRESETS = {
-            LumenlessConfig.Preset.VANILLA,
             LumenlessConfig.Preset.FULLBRIGHT,
             LumenlessConfig.Preset.CLARITY
     };
@@ -140,7 +139,7 @@ public final class LumenlessConfigScreen extends Screen {
                 return (double) i / (SLIDER_PRESETS.length - 1);
             }
         }
-        return (double) 2 / (SLIDER_PRESETS.length - 1);
+        return (double) (SLIDER_PRESETS.length - 1) / (SLIDER_PRESETS.length - 1);
     }
 
     @Override

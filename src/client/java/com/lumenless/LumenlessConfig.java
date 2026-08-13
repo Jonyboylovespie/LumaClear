@@ -27,7 +27,6 @@ public final class LumenlessConfig {
     private static volatile boolean renderStateDirty = true;
 
     public enum Preset {
-        VANILLA("Vanilla"),
         FULLBRIGHT("Fullbright"),
         CLARITY("Lumenless Clarity (Recommended)"),
         CUSTOM("Custom");
@@ -93,18 +92,6 @@ public final class LumenlessConfig {
     public static void applyPreset(Preset next) {
         INSTANCE.preset = next;
         switch (next) {
-            case VANILLA -> {
-                INSTANCE.enabled = false;
-                INSTANCE.fullbright = false;
-                INSTANCE.noDistanceFog = false;
-                INSTANCE.noDarknessFog = false;
-                INSTANCE.noUnderwaterFog = false;
-                INSTANCE.noLavaFog = false;
-                INSTANCE.noPowderSnowFog = false;
-                INSTANCE.noNetherFog = false;
-                INSTANCE.noWeatherFog = false;
-                INSTANCE.directionalShading = false;
-            }
             case FULLBRIGHT -> {
                 INSTANCE.enabled = true;
                 INSTANCE.fullbright = true;
@@ -147,7 +134,7 @@ public final class LumenlessConfig {
     }
 
     public static boolean active() {
-        return INSTANCE.enabled && INSTANCE.preset != Preset.VANILLA;
+        return INSTANCE.enabled;
     }
 
     public static boolean fullbrightActive() {
