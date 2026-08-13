@@ -24,11 +24,8 @@ Open the LumaClear settings screen with `F7`, or use the configuration button in
 | Preset | Description |
 | --- | --- |
 | **Fullbright** | Provides fullbright visibility while retaining normal fog and block-light geometry behavior. |
-| **Clarity** *(recommended)* | Enables every LumaClear feature: fullbright, fog clearing, and directional shading while preserving vanilla/Sodium ambient occlusion. |
+| **Clarity** *(recommended)* | Enables every LumaClear feature: fullbright, fog clearing, and directional shading. |
 | **Custom** | Configure individual LumaClear settings yourself. |
-
-Cloud visibility remains controlled by Minecraft or Sodium.
-
 ## Performance
 
 LumaClear is built to provide a clearer view without paying the heavy rendering cost of a shaderpack. In the published MineBench results, the full LumaClear Default/Clarity configuration averaged 1,344.5 FPS, compared with 769.7 FPS for Iris + the Clarity shaderpack—a 74.7% higher average in the complete five-scene suite. Its 1% low result was also 32.9% higher. With the Nether flythrough excluded, where LumaClear intentionally renders much farther because Nether and distance fog are disabled, the advantage was 77.2% in average FPS.

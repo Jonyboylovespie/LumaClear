@@ -27,7 +27,6 @@ Six configurations completed the full benchmark successfully. Every configuratio
 - Framebuffer: 3168×1782
 - Render distance: 32 chunks
 - Simulation distance: 32 chunks
-- VSync: off · FPS limit: 260
 - MineBench workload target: balanced/native
 - All reported iterations were valid and all completed reports contained zero MineBench warnings.
 
