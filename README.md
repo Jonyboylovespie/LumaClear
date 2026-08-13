@@ -34,7 +34,7 @@ LumaClear also slightly outperformed the tested generic fullbright alternatives 
 
 The main tradeoff is intentional: removing distance and Nether fog exposes more distant terrain, so the Default/Clarity preset can render more geometry than fog-preserving alternatives. In the benchmark’s long Nether flythrough, that reduced Default’s result to 1,167.8 FPS versus roughly 3,700 FPS for fog-preserving configurations. This is the cost of seeing farther, not a sign that the mod’s core lighting optimizations are ineffective. The published results use a fixed route and one test system, so actual gains will vary by hardware, view distance, scene complexity, and configuration.
 
-LumaClear applies its changes through existing rendering paths instead of adding expensive fullscreen effects or extra rendering passes. Its optimizations can reduce unnecessary light sampling and fog work, while optional Sodium integrations use the same fast paths when Sodium is installed. See the [published performance results](PUBLISHED_PERFORMANCE_RESULTS.md) for the complete tables and methodology.
+LumaClear applies its changes through existing rendering paths instead of adding expensive fullscreen effects or extra rendering passes. Its optimizations can reduce unnecessary light sampling and fog work, while optional Sodium integrations use the same fast paths when Sodium is installed. See the [published performance results](https://github.com/Jonyboylovespie/LumaClear/blob/main/PUBLISHED_PERFORMANCE_RESULTS.md) for the complete tables and methodology.
 
 There are no additional framebuffers, deferred passes, shadows, bloom, SSAO, reflections, motion blur, anti-aliasing replacements, or Iris dependencies.
 
