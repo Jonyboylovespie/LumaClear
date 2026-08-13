@@ -1,5 +1,5 @@
 <p align="left">
-  <img src="https://raw.githubusercontent.com/Jonyboylovespie/LumaClear/refs/heads/main/src/main/resources/assets/lumaclear/icon.jpg" alt="LumaClear icon" width="200">
+  <img src="https://raw.githubusercontent.com/Jonyboylovespie/LumaClear/refs/heads/main/ComparisonScreenshots/SideBySide/Underwater-compressed.jpg" alt="Underwater comparison: Vanilla, Fullbright, and LumaClear" width="100%">
 </p>
 
 # LumaClear
