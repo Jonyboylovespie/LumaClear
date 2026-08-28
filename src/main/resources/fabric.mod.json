@@ -4,7 +4,6 @@
   "version": "${version}",
   "name": "LumaClear",
   "description": "Fullbright lighting, fog clearing, and rendering optimizations that improve visibility without sacrificing performance.",
-  "icon": "assets/lumaclear/icon.png",
   "authors": ["Jonyboylovespie"],
   "contact": {
     "sources": "https://github.com/Jonyboylovespie/LumaClear",
