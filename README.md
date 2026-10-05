@@ -1,6 +1,6 @@
 # LumaClear
 
-LumaClear is a client-side Fabric mod that brings fullbright lighting, fog clearing, and targeted rendering optimizations together in one lightweight package. It is designed to make Minecraft clearer while improving performance rather than trading performance away.
+LumaClear is a client-side Fabric mod that brings fullbright lighting, fog clearing, and targeted rendering optimizations together in one lightweight package. It is designed to make Minecraft clearer while improving performance comparatively to other mods that offer clarity to this extent.
 
 LumaClear works with vanilla textures, biome tinting, entity effects, and normal rendering behavior. It does not require Iris or a shaderpack.
 
