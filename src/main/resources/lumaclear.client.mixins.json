@@ -8,7 +8,6 @@
     "FogRendererMixin",
     "AtmosphericFogEnvironmentMixin",
     "LevelRendererMixin",
-    "ShaderManagerMixin",
     "BlockModelLighterMixin"
   ],
   "injectors": {

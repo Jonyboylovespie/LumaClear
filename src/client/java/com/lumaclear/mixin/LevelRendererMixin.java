@@ -30,7 +30,7 @@ public abstract class LevelRendererMixin {
                 && LumaClearConfig.get().noDistanceFog
                 && unobstructedAir
                 && overworldSky) {
-            return ARGB.vector4fFromARGB32(this.levelRenderState.skyRenderState.skyColor);
+            return ARGB.vector4fFromARGB32(ARGB.colorFromVector3f(this.levelRenderState.skyRenderState.skyColor));
         }
 
         return clearColor;

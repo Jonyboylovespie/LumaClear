@@ -1,7 +1,7 @@
 package com.lumaclear.mixin;
 
 import com.lumaclear.ShaderSourceTransform;
-import com.mojang.blaze3d.shaders.ShaderType;
+import com.mojang.renderpearl.api.pipeline.ShaderType;
 import net.minecraft.client.renderer.ShaderManager;
 import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;

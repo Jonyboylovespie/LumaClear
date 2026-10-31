@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.glfw.GLFW;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -22,7 +21,7 @@ public final class LumaClearClient implements ClientModInitializer {
         LumaClearConfig.load();
 
         configKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-                "key.lumaclear.config", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_F7,
+                "key.lumaclear.config", InputConstants.Type.KEYBOARD, InputConstants.KEY_F7,
                 KeyMapping.Category.MISC));
 
         ClientTickEvents.END_CLIENT_TICK.register(LumaClearClient::handleKeys);
