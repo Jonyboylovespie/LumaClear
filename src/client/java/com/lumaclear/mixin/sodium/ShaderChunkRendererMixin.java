@@ -22,8 +22,9 @@ public abstract class ShaderChunkRendererMixin {
         if (LumaClearConfig.fullbrightActive()) {
             cir.getReturnValue().add("LUMACLEAR_FULLBRIGHT");
         }
-        if (LumaClearConfig.removeSodiumFogShader()) {
-            cir.getReturnValue().remove("USE_FOG");
-        }
+        // Sodium 0.9.3's 26.3 fragment shader always consumes the fog varyings.
+        // Removing USE_FOG leaves the vertex and fragment interfaces mismatched
+        // and crashes the first time a world renders, so leave Sodium's define
+        // intact. LumaClear's own fog hooks still handle the visibility change.
     }
 }
