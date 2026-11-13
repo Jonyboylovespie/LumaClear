@@ -47,6 +47,58 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.11.4'
 }
 
+// Apply the real mixins before starting Minecraft's window or renderer.
+// Run without Sodium, or with -PsmokeSodiumVersion=0.9.2+mc26.3.
+sourceSets {
+    smoke {
+        compileClasspath += sourceSets.main.output + sourceSets.client.output + sourceSets.client.compileClasspath
+    }
+}
+
+configurations {
+    smokeSodium
+}
+
+if (providers.gradleProperty('smokeSodiumVersion').isPresent()) {
+    dependencies.add('smokeSodium', "net.caffeinemc:sodium-fabric:${providers.gradleProperty('smokeSodiumVersion').get()}")
+}
+
+def smokeJar = tasks.register('smokeJar', Jar) {
+    archiveClassifier = 'smoke-tests'
+    destinationDirectory = layout.buildDirectory.dir('smoke')
+    from sourceSets.smoke.output
+}
+
+tasks.register('mixinSmokeTest', JavaExec) {
+    group = 'verification'
+    description = 'Loads and checks the real Fabric mixins without opening a game window.'
+    dependsOn tasks.named('jar'), smokeJar
+    mainClass = 'net.fabricmc.loader.impl.launch.knot.KnotClient'
+    classpath = configurations.clientRuntimeClasspath + configurations.smokeSodium
+    systemProperty 'fabric.development', 'true'
+    systemProperty 'fabric.defaultModDistributionNamespace', 'official'
+    systemProperty 'fabric.defaultMixinRemapType', 'static'
+    systemProperty 'fabric.gameVersion', project.minecraft_version
+    systemProperty 'java.awt.headless', 'true'
+    systemProperty 'mixin.debug.export', 'true'
+    systemProperty 'mixin.debug.export.filter', 'net.minecraft.client.renderer.fog.FogRenderer'
+    systemProperty 'mixin.debug.export.decompile', 'false'
+    doFirst {
+        def smokeDir = layout.buildDirectory.dir('mixin-smoke').get().asFile
+        smokeDir.mkdirs()
+        delete new File(smokeDir, '.mixin.out')
+        workingDir smokeDir
+        systemProperty 'fabric.addMods', [
+                tasks.named('jar').get().archiveFile.get().asFile.absolutePath,
+                smokeJar.get().archiveFile.get().asFile.absolutePath
+        ].join(File.pathSeparator)
+    }
+}
+
+tasks.named('check') {
+    dependsOn tasks.named('mixinSmokeTest')
+}
+
 processResources {
     def version = project.version
     inputs.property 'version', version

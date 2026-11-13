@@ -11,7 +11,7 @@ LumaClear works with vanilla textures, biome tinting, entity effects, and normal
 ## Installation
 
 1. Download and install Fabric Loader for your Minecraft version.
-2. Download and install Fabric API.
+2. Download and install Fabric API 0.166.0 or newer for Minecraft 26.3.
 3. Copy the LumaClear mod `.jar` into your Minecraft instance's `mods` folder.
 4. Sodium is optional, but recommended for the best performance and compatibility.
 
@@ -21,22 +21,25 @@ LumaClear is client-only and should not be installed on a dedicated server.
 
 Open the LumaClear settings screen with `F7`, or use the configuration button in Mod Menu. Changes apply immediately and are saved to `config/lumaclear.json`.
 
+The preset button supports mouse clicks and keyboard activation with Enter or Space; hold Shift to cycle backwards. Directional shading can be disabled independently in Custom while retaining ambient occlusion. Fog controls preserve other enabled fog types, including status effects.
+
+Fullbright skips terrain block/sky-light sampling while preserving ambient occlusion, and ignores render rebuilds caused solely by lighting updates. Block changes still rebuild normally. Switching fullbright on or off rebuilds terrain to restore the correct baked lighting. These shortcuts fall back to normal sampling when Iris is installed.
+
 | Preset | Description |
 | --- | --- |
-| **Fullbright** | Provides fullbright visibility while retaining normal fog and block-light geometry behavior. |
+| **Fullbright** | Applies fullbright terrain lighting while retaining normal fog, ambient occlusion, and directional shading. |
 | **Clarity** *(recommended)* | Enables every LumaClear feature: fullbright, fog clearing, and directional shading. |
 | **Custom** | Configure individual LumaClear settings yourself. |
+
 ## Performance
 
-LumaClear is built to provide a clearer view without paying the heavy rendering cost of a shaderpack. In the published MineBench results, the full LumaClear Default/Clarity configuration averaged 1,344.5 FPS, compared with 769.7 FPS for Iris + the Clarity shaderpack—a 74.7% higher average in the complete five-scene suite. Its 1% low result was also 32.9% higher. With the Nether flythrough excluded, where LumaClear intentionally renders much farther because Nether and distance fog are disabled, the advantage was 77.2% in average FPS.
+The full Minecraft 26.3 laptop suite for the updated LumaClear 1.0.1 build completed **150/150 valid iterations with zero MineBench warnings**. It covers Sodium, Iris + Clarity, both LumaClear presets, Gamma Utils at 1500%, and Fullbright UB 7.0 with Polytone.
 
-LumaClear also slightly outperformed the tested generic fullbright alternatives while providing substantially more visual clarity. The fog-preserving LumaClear Fullbright preset measured 0.9% higher average FPS and 2.6% higher 1% lows than the Fullbright UB resource pack, and its 1% lows were 1.3% higher than Sodium + Gamma Utils. These differences are small and should be treated as near-parity rather than a universal guarantee, but they show that the extra clarity features do not require a performance penalty in the normal-fog preset. The full Default/Clarity preset was 3.6% ahead of Sodium after excluding the Nether route, and 3.7–4.0% ahead of the two generic fullbright comparisons on that same basis.
+On the Adreno X1-85 laptop at 1840x1150, view distance 12 and simulation distance 8, Fullbright measured **401.2 FPS** and Clarity **345.1 FPS** across the five scenes. These are means of scene medians, not universal FPS expectations. Ambient occlusion remains enabled.
 
-The main tradeoff is intentional: removing distance and Nether fog exposes more distant terrain, so the Default/Clarity preset can render more geometry than fog-preserving alternatives. In the benchmark’s long Nether flythrough, that reduced Default’s result to 1,167.8 FPS versus roughly 3,700 FPS for fog-preserving configurations. This is the cost of seeing farther, not a sign that the mod’s core lighting optimizations are ineffective. The published results use a fixed route and one test system, so actual gains will vary by hardware, view distance, scene complexity, and configuration.
+Sodium controls span 3.58% in median FPS. Sequential configuration differences can include session drift; small gains or regressions are not established by this matrix.
 
-LumaClear applies its changes through existing rendering paths instead of adding expensive fullscreen effects or extra rendering passes. Its optimizations can reduce unnecessary light sampling and fog work, while optional Sodium integrations use the same fast paths when Sodium is installed. See the [published performance results](https://github.com/Jonyboylovespie/LumaClear/blob/main/PUBLISHED_PERFORMANCE_RESULTS.md) for the complete tables and methodology.
-
-There are no additional framebuffers, deferred passes, shadows, bloom, SSAO, reflections, motion blur, anti-aliasing replacements, or Iris dependencies.
+Every raw interval was independently verified and retained locally. Benchmark source data, charts, and helper tools remain in the ignored `benchmarks/` and `tools/` folders. Previous desktop measurements use different hardware/settings and remain historical evidence. See the [complete laptop results, controls, artifact hash and methodology](PUBLISHED_PERFORMANCE_RESULTS.md).
 
 ## Compatibility
 
@@ -54,4 +57,15 @@ Use Java 25 and the included Gradle wrapper to build the mod:
 ./gradlew build
 ```
 
-The compiled mod and sources jar are written to `build/libs/`. Sodium and Mod Menu are compile-only integrations and are not bundled with LumaClear.
+The compiled mod and sources jar are written to `build/libs/`. Sodium and Mod Menu are compile-only integrations and are not bundled with LumaClear. The build includes unit tests and the headless smoke check without Sodium.
+
+Run the real Fabric mixin and CPU behavior checks without opening a game window:
+
+```text
+./gradlew mixinSmokeTest
+./gradlew mixinSmokeTest -PsmokeSodiumVersion=0.9.2+mc26.3
+./gradlew mixinSmokeTest -PsmokeSodiumVersion=0.9.3-beta.1+mc26.3
+./gradlew mixinSmokeTest -PsmokeSodiumVersion=0.9.3-beta.4+mc26.3
+```
+
+The smoke-test fixture stays in `build/smoke/`, outside the distributable jars.

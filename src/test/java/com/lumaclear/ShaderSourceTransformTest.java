@@ -26,4 +26,38 @@ class ShaderSourceTransformTest {
         assertSame(source, ShaderSourceTransform.addFullbrightTerrainVariant(source));
         assertEquals(null, ShaderSourceTransform.addFullbrightTerrainVariant(null));
     }
+
+    @Test
+    void preservesSodiumsAlphaOnlyOitBranchAndShaderVersion() {
+        String source = """
+                #version 330
+                void main() {
+                #ifndef OIT_ALPHA_ONLY
+                    v_Color = _vert_color * texture(u_LightTex, _vert_tex_light_coord);
+                #else
+                    v_Color = _vert_color;
+                #endif
+                }
+                """;
+
+        String transformed = ShaderSourceTransform.addFullbrightTerrainVariant(source);
+
+        // All OIT stages share this source. Fullbright must guard only the
+        // lightmap branch, leaving alpha-only stages and #version untouched.
+        assertEquals("""
+                #version 330
+                void main() {
+                #ifndef OIT_ALPHA_ONLY
+                    #ifdef LUMACLEAR_FULLBRIGHT
+                    v_Color = _vert_color;
+                #else
+                    v_Color = _vert_color * texture(u_LightTex, _vert_tex_light_coord);
+                #endif
+                #else
+                    v_Color = _vert_color;
+                #endif
+                }
+                """, transformed);
+        assertSame(transformed, ShaderSourceTransform.addFullbrightTerrainVariant(transformed));
+    }
 }

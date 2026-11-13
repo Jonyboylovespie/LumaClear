@@ -15,16 +15,21 @@ class RenderToggleLogicTest {
     }
 
     @Test
-    void directionalShadingPreservesTheModelsShadeFlagOutsideLumaClear() {
-        assertTrue(RenderToggleLogic.directionalShade(false, false, true));
-        assertFalse(RenderToggleLogic.directionalShade(false, true, false));
+    void directionalBrightnessKeepsVanillaAndModelOverridesWhenShadingIsEnabled() {
+        for (float brightness : new float[]{0.0F, 0.5F, 0.8F, 0.9F, 1.0F}) {
+            assertEquals(brightness, RenderToggleLogic.directionalBrightness(false, false, brightness));
+            assertEquals(brightness, RenderToggleLogic.directionalBrightness(false, true, brightness));
+            assertEquals(brightness, RenderToggleLogic.directionalBrightness(true, true, brightness));
+        }
     }
 
     @Test
-    void directionalShadingCanBeDisabledWithoutChangingAmbientOcclusion() {
-        assertTrue(RenderToggleLogic.directionalShade(true, true, true));
-        assertFalse(RenderToggleLogic.directionalShade(true, false, true));
-        assertFalse(RenderToggleLogic.directionalShade(true, true, false));
+    void disablingDirectionalBrightnessPreservesTheSeparateAmbientOcclusionFactor() {
+        float ambientOcclusion = 0.625F;
+        float directionalBrightness = RenderToggleLogic.directionalBrightness(true, false, 0.6F);
+
+        assertEquals(1.0F, directionalBrightness);
+        assertEquals(ambientOcclusion, ambientOcclusion * directionalBrightness);
     }
 
     @Test

@@ -3,21 +3,12 @@ package com.lumaclear;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
-import net.minecraft.client.Camera;
-import net.minecraft.client.renderer.fog.FogData;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.FogType;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/**
- * Small, deliberately dependency-free configuration model. The rendering mixins only read this class, so changing a
- * setting never allocates or touches the hot render path beyond a few primitive checks.
- */
+/** Persisted settings and simple activation checks; Minecraft fog decisions live in LumaClearFogPolicy. */
 public final class LumaClearConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path FILE = net.fabricmc.loader.api.FabricLoader.getInstance()
@@ -42,10 +33,10 @@ public final class LumaClearConfig {
         }
     }
 
-    public boolean enabled = true;
+    public volatile boolean enabled = true;
     public Preset preset = Preset.CLARITY;
 
-    public boolean fullbright = true;
+    public volatile boolean fullbright = true;
     public boolean noDistanceFog = true;
     public boolean noDarknessFog = true;
     public boolean noUnderwaterFog = true;
@@ -118,9 +109,6 @@ public final class LumaClearConfig {
             }
             case CUSTOM -> INSTANCE.enabled = true;
         }
-
-        save();
-        markRenderStateDirty();
     }
 
     public static void markRenderStateDirty() {
@@ -141,35 +129,6 @@ public final class LumaClearConfig {
         return active() && INSTANCE.fullbright;
     }
 
-    public static boolean removeSodiumFogShader() {
-        return active()
-                && INSTANCE.noDistanceFog
-                && INSTANCE.noDarknessFog
-                && INSTANCE.noUnderwaterFog
-                && INSTANCE.noLavaFog
-                && INSTANCE.noPowderSnowFog
-                && INSTANCE.noNetherFog
-                && INSTANCE.noWeatherFog;
-    }
-
-    public static boolean applyDirectionalShading(boolean modelShade) {
-        return RenderToggleLogic.directionalShade(active(), INSTANCE.directionalShading, modelShade);
-    }
-
-    public static void applyFog(Camera camera, FogData fog) {
-        if (distanceFogDisabled()) {
-            fog.renderDistanceStart = Float.MAX_VALUE;
-            fog.renderDistanceEnd = Float.MAX_VALUE;
-            fog.skyEnd = Float.MAX_VALUE;
-            fog.cloudEnd = Float.MAX_VALUE;
-        }
-
-        if (environmentalFogDisabledFor(camera)) {
-            fog.environmentalStart = Float.MAX_VALUE;
-            fog.environmentalEnd = Float.MAX_VALUE;
-        }
-    }
-
     public static boolean distanceFogDisabled() {
         return RenderToggleLogic.settingActive(active(), INSTANCE.noDistanceFog);
     }
@@ -178,33 +137,8 @@ public final class LumaClearConfig {
         return RenderToggleLogic.settingActive(active(), INSTANCE.noWeatherFog);
     }
 
-    /** True when the camera's current environment-specific fog must be removed. */
-    public static boolean environmentalFogDisabledFor(Camera camera) {
-        if (!active()) {
-            return false;
-        }
-
-        boolean environmentFogDisabled = switch (camera.getFluidInCamera()) {
-            case WATER -> INSTANCE.noUnderwaterFog;
-            case LAVA -> INSTANCE.noLavaFog;
-            case POWDER_SNOW -> INSTANCE.noPowderSnowFog;
-            case NONE, ATMOSPHERIC -> INSTANCE.noNetherFog && isNether(camera);
-        };
-
-        return environmentFogDisabled || (INSTANCE.noDarknessFog && isDarknessEffect(camera.entity()));
-    }
-
     public static String activePresetName() {
         return INSTANCE.preset.displayName();
-    }
-
-    private static boolean isDarknessEffect(Entity entity) {
-        return entity instanceof LivingEntity living
-                && (living.hasEffect(MobEffects.DARKNESS) || living.hasEffect(MobEffects.BLINDNESS));
-    }
-
-    private static boolean isNether(Camera camera) {
-        return camera.entity() != null && camera.entity().level().dimension() == Level.NETHER;
     }
 
     private static void copyFrom(LumaClearConfig loaded) {

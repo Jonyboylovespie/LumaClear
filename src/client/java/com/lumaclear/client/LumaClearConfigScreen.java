@@ -3,8 +3,8 @@ package com.lumaclear.client;
 import com.lumaclear.LumaClearConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.Nullable;
@@ -15,10 +15,6 @@ import java.util.function.BooleanSupplier;
 public final class LumaClearConfigScreen extends Screen {
     private static final int COLUMN_WIDTH = 150;
     private static final int FULL_WIDTH = 310;
-    private static final LumaClearConfig.Preset[] SLIDER_PRESETS = {
-            LumaClearConfig.Preset.FULLBRIGHT,
-            LumaClearConfig.Preset.CLARITY
-    };
 
     private final @Nullable Screen parent;
 
@@ -33,7 +29,7 @@ public final class LumaClearConfigScreen extends Screen {
         int right = this.width / 2 + 5;
         int y = 38;
 
-        this.addRenderableWidget(new PresetSlider(left, y));
+        this.addRenderableWidget(createPresetButton(left, y, this::refreshButtons));
 
         y += 25;
         this.addRenderableWidget(Button.builder(toggleLabel("Mod enabled", LumaClearConfig.active()), button -> {
@@ -80,6 +76,19 @@ public final class LumaClearConfigScreen extends Screen {
                 .bounds(this.width / 2 - 75, this.height - 26, COLUMN_WIDTH, 20).build());
     }
 
+    static CycleButton<LumaClearConfig.Preset> createPresetButton(int x, int y, Runnable refresh) {
+        CycleButton<LumaClearConfig.Preset> presetButton = CycleButton.<LumaClearConfig.Preset>builder(
+                preset -> Component.literal(preset.displayName()), LumaClearConfig.Preset.CLARITY)
+                .withValues(LumaClearConfig.Preset.values())
+                .create(x, y, FULL_WIDTH, 20, Component.literal("Preset"), (button, preset) -> {
+                    LumaClearConfig.applyPreset(preset);
+                    LumaClearClient.settingsChanged();
+                    refresh.run();
+                });
+        presetButton.setValue(LumaClearConfig.get().preset);
+        return presetButton;
+    }
+
     private Button settingToggle(int x, int y, String label, BooleanSupplier state, Runnable toggle) {
         return Button.builder(toggleLabel(label, state.getAsBoolean()), button -> {
             toggle.run();
@@ -92,54 +101,16 @@ public final class LumaClearConfigScreen extends Screen {
     }
 
     private void refreshButtons() {
+        int focusedIndex = this.children().indexOf(this.getFocused());
         this.clearWidgets();
         this.init();
+        if (focusedIndex >= 0 && focusedIndex < this.children().size()) {
+            this.setFocused(this.children().get(focusedIndex));
+        }
     }
 
     private static Component toggleLabel(String label, boolean value) {
         return Component.literal(label + ": " + (value ? "ON" : "OFF"));
-    }
-
-    private final class PresetSlider extends AbstractSliderButton {
-        private PresetSlider(int x, int y) {
-            super(x, y, FULL_WIDTH, 20, Component.empty(), presetValue(LumaClearConfig.get().preset));
-            this.updateMessage();
-        }
-
-        @Override
-        protected void updateMessage() {
-            LumaClearConfig.Preset activePreset = LumaClearConfig.get().preset;
-            String name = activePreset == LumaClearConfig.Preset.CUSTOM
-                    ? activePreset.displayName()
-                    : SLIDER_PRESETS[presetIndex(this.value)].displayName();
-            this.setMessage(Component.literal("Preset: " + name));
-        }
-
-        @Override
-        protected void applyValue() {
-            int index = presetIndex(this.value);
-            this.value = (double) index / (SLIDER_PRESETS.length - 1);
-            LumaClearConfig.Preset selected = SLIDER_PRESETS[index];
-            if (LumaClearConfig.get().preset != selected) {
-                LumaClearConfig.applyPreset(selected);
-                LumaClearClient.settingsChanged();
-                LumaClearConfigScreen.this.refreshButtons();
-            }
-        }
-    }
-
-    private static int presetIndex(double value) {
-        return Math.max(0, Math.min(SLIDER_PRESETS.length - 1,
-                (int) Math.round(value * (SLIDER_PRESETS.length - 1))));
-    }
-
-    private static double presetValue(LumaClearConfig.Preset preset) {
-        for (int i = 0; i < SLIDER_PRESETS.length; i++) {
-            if (SLIDER_PRESETS[i] == preset) {
-                return (double) i / (SLIDER_PRESETS.length - 1);
-            }
-        }
-        return (double) (SLIDER_PRESETS.length - 1) / (SLIDER_PRESETS.length - 1);
     }
 
     @Override

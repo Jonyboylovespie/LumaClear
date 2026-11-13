@@ -4,3 +4,14 @@ run/
 bin/
 .idea/
 *.iml
+
+# Local benchmark instances, downloads, runtimes, and transfer archives.
+.benchmark-work/
+
+# Python caches.
+__pycache__/
+*.py[cod]
+
+# Benchmark data and helper scripts are local-only.
+/benchmarks/
+/tools/

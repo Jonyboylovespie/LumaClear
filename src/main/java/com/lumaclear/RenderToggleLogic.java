@@ -9,8 +9,8 @@ public final class RenderToggleLogic {
         return modActive && settingEnabled;
     }
 
-    public static boolean directionalShade(boolean modActive, boolean directionalShading, boolean modelShade) {
-        return modelShade && (!modActive || directionalShading);
+    public static float directionalBrightness(boolean modActive, boolean directionalShading, float brightness) {
+        return modActive && !directionalShading ? 1.0F : brightness;
     }
 
     public static float weatherFogMultiplier(

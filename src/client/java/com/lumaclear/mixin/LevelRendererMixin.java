@@ -25,11 +25,14 @@ public abstract class LevelRendererMixin {
         FogType fogType = this.levelRenderState.cameraRenderState.fogType;
         boolean unobstructedAir = fogType == FogType.NONE || fogType == FogType.ATMOSPHERIC;
         boolean overworldSky = this.levelRenderState.skyRenderState.skybox == DimensionType.Skybox.OVERWORLD;
+        boolean retainedDarknessFog = !LumaClearConfig.get().noDarknessFog
+                && this.levelRenderState.cameraRenderState.entityRenderState.doesMobEffectBlockSky;
 
         if (LumaClearConfig.active()
                 && LumaClearConfig.get().noDistanceFog
                 && unobstructedAir
-                && overworldSky) {
+                && overworldSky
+                && !retainedDarknessFog) {
             return ARGB.vector4fFromARGB32(ARGB.colorFromVector3f(this.levelRenderState.skyRenderState.skyColor));
         }
 

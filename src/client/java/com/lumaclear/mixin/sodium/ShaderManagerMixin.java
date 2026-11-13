@@ -1,19 +1,24 @@
-package com.lumaclear.mixin;
+package com.lumaclear.mixin.sodium;
 
 import com.lumaclear.ShaderSourceTransform;
 import com.mojang.renderpearl.api.pipeline.ShaderType;
-import net.minecraft.client.renderer.ShaderManager;
 import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/** Removes Sodium's terrain lightmap lookup without carrying a forked copy of Sodium's shader. */
-@Mixin(ShaderManager.class)
+/**
+ * Edits only Sodium's terrain vertex source. Since 26.3 the source provider is
+ * ShaderManager's private Configs record, rather than ShaderManager itself.
+ */
+@Mixin(targets = "net.minecraft.client.renderer.ShaderManager$Configs")
 public abstract class ShaderManagerMixin {
+    @Unique
     private static final String SODIUM_TERRAIN_SHADER = "blocks/block_layer_opaque";
-    @Inject(method = "getShader", at = @At("RETURN"), cancellable = true)
+
+    @Inject(method = "getShader", at = @At("RETURN"), cancellable = true, require = 1)
     private void lumaclear$removeTerrainLightmapLookup(
             Identifier id,
             ShaderType type,
